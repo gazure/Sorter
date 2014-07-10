@@ -15,27 +15,39 @@ public class Quicksorter {
 	
 	private boolean recurse;
 	private boolean sorted;
+	
+	//for use if both recursive calls need to be made
+	private Quicksorter forkQuicksorter;
+	
+	
+	public Quicksorter(int[] array){
+		this(array, 0, array.length);
+	}
+	
 	/**
 	 * initializes a staged-quicksort algorithm 
 	 * @param array - array to be sorted
 	 * @throws IllegalArgumentException if array is null or 0 length
 	 */
-	public Quicksorter(int[] array){
-		if(array != null || array.length == 0){
+	public Quicksorter(int[] array, int lo, int hi){
+		if(array == null || array.length == 0){
 			throw new IllegalArgumentException();
 		}
 		this.array = array;
-		this.lo = 0;
-		this.hi = array.length;
-		this.pivot = array[hi / 2];
+		this.lo = lo;
+		this.hi = hi;
+		this.pivot = array[lo + (hi - lo) / 2];
 		this.i = lo;
 		this.j = hi;
 		this.recurse = false;
 		this.sorted = false;
 	}
 	
-	public int[] step(){
-		if(!recurse){		
+	
+	public void step(){
+		if(forkQuicksorter != null && !forkQuicksorter.isSorted()){
+			forkQuicksorter.step();
+		}else if(!sorted && !recurse){		
 			while(i <= j){
 				while(array[i] < pivot)
 					i++;
@@ -49,18 +61,41 @@ public class Quicksorter {
 					
 					if(i > j) 
 						recurse = true;
-					
-					int[] ret = {i - 1, j + 1};
-					return ret;
+					return;
 				}
 			}
 			recurse = true;
 			step();
-		}else{
-			
+		}else if(!sorted){
+			if(lo < j && i < hi){
+				forkQuicksorter = new Quicksorter(array, lo, j);
+				this.lo = i;
+				this.j = hi;
+				this.pivot = array[i + (j - i) / 2];
+				this.recurse = false;
+			}else if(lo < j && i > hi){
+				
+				this.hi = j;
+				this.pivot = array[lo + (j - lo) / 2];
+				this.i = lo;
+				this.recurse = false;
+				
+				
+			}else if(lo > j && i < hi){
+				this.lo = i;
+				this.j = hi;
+				this.pivot = array[i + (j - i) / 2];
+				this.recurse = false;
+			}else{
+				sorted = true;
+				forkQuicksorter = null;
+			}
 		}
 		
-		return new int[2];
+	}
+	
+	public boolean isSorted(){
+		return sorted;
 	}
 	
 	private void swap(int i, int j){

@@ -17,17 +17,17 @@ public class MainActivity extends Activity {
 	private int[] array;
 	final Handler myHandler = new Handler();
 	TextView tv ;
-	
-	
+	TextView counter;
+	int count;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
 		tv = (TextView) findViewById(R.id.array_tv);
-		
+		counter = (TextView) findViewById(R.id.textView1);
 		array = new int[10];
-		
+		count = 0;
 		for(int i = 0; i < array.length ; i++){
 			array[i] = i;
 		}
@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
 	
 	final Runnable myRunnable = new Runnable() {
 		public void run() {
+			counter.setText(String.valueOf(count));
 			tv.setText(arrayPayload());
 		}
 	};
@@ -56,6 +57,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void update(){
+		count++;
 		myHandler.post(myRunnable);
 	}
 		
@@ -65,7 +67,8 @@ public class MainActivity extends Activity {
 		for(Integer i : array){
 			UIPayload += i + " ";
 		}
-		return UIPayload.substring(0, UIPayload.length() - 1); 
+		UIPayload = UIPayload.substring(0, UIPayload.length() - 1);
+		return UIPayload;
 	}
 	
 	

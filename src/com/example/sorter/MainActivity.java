@@ -3,14 +3,10 @@ package com.example.sorter;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -18,6 +14,8 @@ public class MainActivity extends Activity {
 	private int[] array;
 	final Handler myHandler = new Handler();
 	TextView tv ;
+	Timer myTimer;
+	private boolean isRunning;
 	private Quicksorter qs;
 	
 	
@@ -27,7 +25,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		tv = (TextView) findViewById(R.id.array_tv);
-		
+		isRunning = false;
 		array = new int[10];
 		qs = new Quicksorter(array);
 		
@@ -35,16 +33,13 @@ public class MainActivity extends Activity {
 			array[i] = i;
 		}
 		randomizeArray();
-		
-//		Timer myTimer = new Timer();
-//	      myTimer.schedule(new TimerTask() {
-//	         @Override
-//	         public void run() {update();}
-//	      }, 0, 1000);
+		tv.setText(arrayPayload());
+
 	}
 	
 	final Runnable myRunnable = new Runnable() {
 		public void run() {
+			
 			qs.step();
 			tv.setText(arrayPayload());
 		}
@@ -59,12 +54,6 @@ public class MainActivity extends Activity {
 	
 	}
 	
-	private void update(){
-		
-		myHandler.post(myRunnable);
-	}
-		
-	
 	private String arrayPayload(){
 		String UIPayload = "";
 		for(Integer i : array){
@@ -77,19 +66,28 @@ public class MainActivity extends Activity {
 	
 	
 	public void reset(View v){
-		//randomizeArray();
-		
+		if(!isRunning){
+			randomizeArray();
+			tv.setText(arrayPayload());
+		}
 	}
 	
 	public void sort(View v){
-		Button sb = (Button) findViewById(R.id.sort_button);
-		sb.setEnabled(false);
-		
-		Timer myTimer = new Timer();
-	      myTimer.schedule(new TimerTask() {
-	         @Override
-	         public void run() {update();}
-	      }, 0, 1000);
+		if(!isRunning){		
+			isRunning = true;
+			Timer myTimer = new Timer();
+		      myTimer.schedule(new TimerTask() {
+		         @Override
+		         public void run() {
+		        	 if(qs.isSorted()){
+		        		cancel();
+		        		isRunning = false;
+		        	 }
+		        		
+		        	 myHandler.post(myRunnable);
+		         }
+		      }, 0, 100);
+		}
 	}
 	
 	

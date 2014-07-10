@@ -21,7 +21,7 @@ public class Quicksorter {
 	
 	
 	public Quicksorter(int[] array){
-		this(array, 0, array.length);
+		this(array, 0, array.length - 1);
 	}
 	
 	/**
@@ -73,7 +73,7 @@ public class Quicksorter {
 				this.j = hi;
 				this.pivot = array[i + (j - i) / 2];
 				this.recurse = false;
-			}else if(lo < j && i > hi){
+			}else if(lo < j){
 				
 				this.hi = j;
 				this.pivot = array[lo + (j - lo) / 2];
@@ -81,7 +81,7 @@ public class Quicksorter {
 				this.recurse = false;
 				
 				
-			}else if(lo > j && i < hi){
+			}else if(i < hi){
 				this.lo = i;
 				this.j = hi;
 				this.pivot = array[i + (j - i) / 2];
@@ -90,6 +90,7 @@ public class Quicksorter {
 				sorted = true;
 				forkQuicksorter = null;
 			}
+			step();
 		}
 		
 	}

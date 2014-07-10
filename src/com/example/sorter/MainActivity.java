@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
@@ -17,32 +18,34 @@ public class MainActivity extends Activity {
 	private int[] array;
 	final Handler myHandler = new Handler();
 	TextView tv ;
-	TextView counter;
-	int count;
+	private Quicksorter qs;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
 		tv = (TextView) findViewById(R.id.array_tv);
-		counter = (TextView) findViewById(R.id.textView1);
+		
 		array = new int[10];
-		count = 0;
+		qs = new Quicksorter(array);
+		
 		for(int i = 0; i < array.length ; i++){
 			array[i] = i;
 		}
 		randomizeArray();
 		
-		Timer myTimer = new Timer();
-	      myTimer.schedule(new TimerTask() {
-	         @Override
-	         public void run() {update();}
-	      }, 0, 1000);
+//		Timer myTimer = new Timer();
+//	      myTimer.schedule(new TimerTask() {
+//	         @Override
+//	         public void run() {update();}
+//	      }, 0, 1000);
 	}
 	
 	final Runnable myRunnable = new Runnable() {
 		public void run() {
-			counter.setText(String.valueOf(count));
+			qs.step();
 			tv.setText(arrayPayload());
 		}
 	};
@@ -57,7 +60,7 @@ public class MainActivity extends Activity {
 	}
 	
 	private void update(){
-		count++;
+		
 		myHandler.post(myRunnable);
 	}
 		
@@ -74,39 +77,22 @@ public class MainActivity extends Activity {
 	
 	
 	public void reset(View v){
-		randomizeArray();
+		//randomizeArray();
 		
 	}
 	
 	public void sort(View v){
-		quickSort(0, array.length - 1);
+		Button sb = (Button) findViewById(R.id.sort_button);
+		sb.setEnabled(false);
 		
+		Timer myTimer = new Timer();
+	      myTimer.schedule(new TimerTask() {
+	         @Override
+	         public void run() {update();}
+	      }, 0, 1000);
 	}
 	
-	private void quickSort(int p, int r){
-		int i = p;
-		int j = r;
-		int pivot = array[i + (j - i)/2];
-		while(i <= j){
-			while(array[i] < pivot){
-				i++;
-			}
-			while(array[j] > pivot){
-				j--;
-			}
-			
-			if(i <= j) {
-				swap(i, j);
-				i++;
-				j--;
-			}
-		}
-		
-		if(p < j)
-			quickSort(p, j);
-		if(i < r)
-			quickSort(i, r);
-	}
+	
 	
 	private void swap(int i, int j){
 		int temp = array[j];

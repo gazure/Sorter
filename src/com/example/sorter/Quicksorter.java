@@ -8,7 +8,7 @@ public class Quicksorter implements Sorter{
 	private int[] array;
 	private int lo;
 	private int hi;
-	private int pivot;
+	protected int pivot;
 	private int i;
 	private int j;
 	

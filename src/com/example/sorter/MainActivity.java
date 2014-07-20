@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		array_tv = (TextView) findViewById(R.id.array_tv);
 		isSorting = false;
 		array = new int[10];
-		sorter = new Quicksorter(array);
+		sorter = new MedOfThreeQS(array);
 		
 		for(int i = 0; i < array.length ; i++){
 			array[i] = i;
@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
 	public void reset(View v){
 		if(!isSorting){
 			randomizeArray();
-			sorter = new Quicksorter(array);
+			sorter = new MedOfThreeQS(array);
 			array_tv.setText(arrayPayload());
 		}
 	}
@@ -128,7 +128,7 @@ public class MainActivity extends Activity {
 	 * @param j - second index
 	 */
 	private void swap(int i, int j){
-		if(0 <= i || 0 <= j || i < array.length || j < array.length){
+		if(!(0 <= i || 0 <= j || i < array.length || j < array.length)){
 			throw new ArrayIndexOutOfBoundsException();
 		}
 		int temp = array[j];

@@ -13,8 +13,7 @@ public class MainActivity extends Activity {
 
 	private int[] array;
 	final Handler myHandler = new Handler();
-	TextView tv ;
-	Timer myTimer;
+	private TextView tv ;
 	private boolean isRunning;
 	private Quicksorter qs;
 	
@@ -42,6 +41,9 @@ public class MainActivity extends Activity {
 			
 			qs.step();
 			tv.setText(arrayPayload());
+			if(qs.isSorted()){
+				isRunning = false;
+			}
 		}
 	};
 	
@@ -54,6 +56,9 @@ public class MainActivity extends Activity {
 	
 	}
 	
+	/**
+	 * @return a formatted string of the current state of the array
+	 */
 	private String arrayPayload(){
 		String UIPayload = "";
 		for(Integer i : array){
@@ -68,6 +73,7 @@ public class MainActivity extends Activity {
 	public void reset(View v){
 		if(!isRunning){
 			randomizeArray();
+			qs = new Quicksorter(array);
 			tv.setText(arrayPayload());
 		}
 	}
@@ -81,7 +87,6 @@ public class MainActivity extends Activity {
 		         public void run() {
 		        	 if(qs.isSorted()){
 		        		cancel();
-		        		isRunning = false;
 		        	 }
 		        		
 		        	 myHandler.post(myRunnable);

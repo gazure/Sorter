@@ -8,39 +8,40 @@
         android:id="@+id/array_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/sort_alg_name"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
         android:text="@string/default_val"
         android:textSize="@dimen/sort_array_text_size" />
-
-    <Button
-        android:id="@+id/reset_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/array_tv"
-        android:layout_marginTop="90dp"
-        android:text="@string/reset_button_name"
-        android:onClick="reset" />
 
     <Button
         android:id="@+id/sort_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/reset_button"
-        android:layout_alignBottom="@+id/reset_button"
-        android:layout_alignParentRight="true"
+        android:layout_alignRight="@+id/array_tv"
+        android:layout_below="@+id/array_tv"
         android:layout_toRightOf="@+id/reset_button"
-        android:text="@string/sort_button_name"
-        android:onClick="sort" />
+        android:onClick="sort"
+        android:text="@string/sort_button_name" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <Button
+        android:id="@+id/reset_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/reset_button"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_alignLeft="@+id/array_tv"
+        android:layout_below="@+id/array_tv"
+        android:onClick="reset"
+        android:text="@string/reset_button_name" />
+
+    <TextView
+        android:id="@+id/sort_alg_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/sort_alg_name_default"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="@dimen/sort_alg_name_size" />
 
 </RelativeLayout>

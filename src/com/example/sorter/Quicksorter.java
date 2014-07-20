@@ -4,7 +4,7 @@ package com.example.sorter;
 //two elements in the algorithm
 	
 
-public class Quicksorter {
+public class Quicksorter implements Sorter{
 	private int[] array;
 	private int lo;
 	private int hi;
@@ -43,7 +43,7 @@ public class Quicksorter {
 		this.sorted = false;
 	}
 	
-	
+	/**{@inheritDoc}} */
 	public void step(){
 		if(forkQuicksorter != null && !forkQuicksorter.isSorted()){
 			forkQuicksorter.step();
@@ -95,6 +95,7 @@ public class Quicksorter {
 		
 	}
 	
+	/**{@inheritDoc} */
 	public boolean isSorted(){
 		return sorted;
 	}

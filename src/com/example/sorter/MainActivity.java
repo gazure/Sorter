@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
 	private final Handler myHandler = new Handler(); //for timer-based UI updates
 	private TextView array_tv; //UI element responsible for displaying array
 	private boolean isSorting; //flag whether sorting is happening
-	private Quicksorter sorter;//Current sorting implementation
+	private Sorter sorter;//Current sorting implementation
 
 	//primary runnable responsible for advancing the state of the
 	//sort and setting appropriate flags 
@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 		array_tv = (TextView) findViewById(R.id.array_tv);
 		isSorting = false;
 		array = new int[10];
-		sorter = new MedOfThreeQS(array);
+		sorter = new BubbleSorter(array);
 		
 		for(int i = 0; i < array.length ; i++){
 			array[i] = i;

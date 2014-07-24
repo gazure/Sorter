@@ -44,7 +44,7 @@ public class Quicksorter implements Sorter{
 	}
 	
 	/**{@inheritDoc}} */
-	public void step(){
+	public Step step(){
 		if(forkQuicksorter != null && !forkQuicksorter.isSorted()){
 			forkQuicksorter.step();
 		}else if(!sorted && !recurse){		
@@ -61,7 +61,7 @@ public class Quicksorter implements Sorter{
 					
 					if(i > j) 
 						recurse = true;
-					return;
+					return Step.SWAP;
 				}
 			}
 			recurse = true;
@@ -92,6 +92,7 @@ public class Quicksorter implements Sorter{
 			}
 			step();
 		}
+		return Step.DONE;
 		
 	}
 	

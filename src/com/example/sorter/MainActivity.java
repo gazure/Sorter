@@ -1,19 +1,19 @@
 package com.example.sorter;
 
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 	
 	/* constants */
 	private final int NUMBER_OF_RANDOM_SWAPS = 100;
-	
+	private final int MILLIS_BETWEEN_SORTER_STEPS = 100;
 	/* fields */
 	private int[] array; //primary representation of array
 	private final Handler myHandler = new Handler(); //for timer-based UI updates
@@ -29,6 +29,9 @@ public class MainActivity extends Activity {
 			sorter.step();
 			array_tv.setText(arrayPayload());
 			isSorting = !sorter.isSorted();
+			if(!sorter.isSorted()){
+				myHandler.postDelayed(myRunnable, MILLIS_BETWEEN_SORTER_STEPS);
+			}
 		}
 	};
 	
@@ -43,8 +46,10 @@ public class MainActivity extends Activity {
 		array_tv = (TextView) findViewById(R.id.array_tv);
 		isSorting = false;
 		array = new int[10];
-		sorter = new BubbleSorter(array);
+		sorter = new MedOfThreeQS(array);
 		
+		LinearLayout l = (LinearLayout)  findViewById(R.id.indeces);
+		Log.d("Layout Kids", ""+l.getChildCount());
 		for(int i = 0; i < array.length ; i++){
 			array[i] = i;
 		}
@@ -78,17 +83,7 @@ public class MainActivity extends Activity {
 	public void sort(View v){
 		if(!isSorting){		
 			isSorting = true;
-			Timer myTimer = new Timer();
-		      myTimer.schedule(new TimerTask() {
-		         @Override
-		         public void run() {
-		        	 if(sorter.isSorted()){
-		        		cancel();
-		        	 }
-		        		
-		        	 myHandler.post(myRunnable);
-		         }
-		      }, 0, 100);
+			myHandler.post(myRunnable);
 		}
 	}
 	

@@ -11,7 +11,7 @@ public class BubbleSorter implements Sorter{
 	public BubbleSorter(int[] arr){
 		this.arr = arr;
 		outer_i = 0;
-		inner_j = arr.length;
+		inner_j = arr.length - 1;
 		sorted = false;
 		comping = false;
 	}

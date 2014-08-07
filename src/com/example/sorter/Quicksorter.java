@@ -9,6 +9,8 @@ public class Quicksorter implements Sorter{
 	private int lo;
 	private int hi;
 	protected int pivot;
+	protected int pivot_index;
+	protected int comparison_index;
 	private int i;
 	private int j;
 	
@@ -36,11 +38,13 @@ public class Quicksorter implements Sorter{
 		this.array = array;
 		this.lo = lo;
 		this.hi = hi;
-		this.pivot = array[lo + (hi - lo) / 2];
+		this.pivot_index = lo + (hi - lo) /2 ;
+		this.pivot = array[pivot_index];
 		this.i = lo;
 		this.j = hi;
 		this.recurse = false;
 		this.sorted = false;
+		this.comparison_index = -1;
 	}
 	
 	/**{@inheritDoc}} */
@@ -49,8 +53,11 @@ public class Quicksorter implements Sorter{
 			forkQuicksorter.step();
 		}else if(!sorted && !recurse){		
 			while(i <= j){
+				
+				//comparing i
 				while(array[i] < pivot)
 					i++;
+				//comparing j
 				while(array[j] > pivot)
 					j--;
 				

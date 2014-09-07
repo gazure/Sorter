@@ -99,6 +99,7 @@ public class MainActivity extends Activity {
 		for(int i = 0; i < NUMBER_OF_RANDOM_SWAPS; i++){
 			swap(rand.nextInt(10), rand.nextInt(10));
 		}
+		 
 	
 	}
 	

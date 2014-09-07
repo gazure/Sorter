@@ -1,7 +1,5 @@
 package com.example.sorter;
 
-import com.example.sorter.Sorter.Step;
-
 public class ComparisonQuicksorter implements Sorter{
 	
 	private boolean sorted;
@@ -14,7 +12,11 @@ public class ComparisonQuicksorter implements Sorter{
 	private int i;
 	private int j;
 	private int pivot_index;
-	private int[] comparison_indeces;
+	private int comp_index_1;
+	private int comp_index_2;
+	private int swap_index_1;
+	private int swap_index_2;
+	private ComparisonQuicksorter fork_quicksorter;
 	
 	public ComparisonQuicksorter(int[] array, int lo, int hi){
 		if(array == null || array.length == 0){
@@ -35,7 +37,7 @@ public class ComparisonQuicksorter implements Sorter{
 		switch(current_step){
 		case COMP_I : return compare_i();
 		case COMP_J : return compare_j();
-		case SWAP   : return swap();
+		case SWAP   : return swap_step();
 		case RECURSE: return recurse();
 		case FORK   : return fork();
 		case SORTED : return Step.DONE;
@@ -48,6 +50,14 @@ public class ComparisonQuicksorter implements Sorter{
 		return sorted;
 	}
 	
+	public int[] comparison_indeces(){
+		return new int[] {comp_index_1, comp_index_2};
+	}
+	
+	public int[] swap_indeces(){
+		return new int[] {swap_index_1, swap_index_2};
+	}
+	
 	private Step compare_i_or_j(char i_or_j){
 		int n;
 		if(i_or_j == 'i'){
@@ -55,8 +65,8 @@ public class ComparisonQuicksorter implements Sorter{
 		}else{
 			n = j;
 		}
-		int[] temp = {n, pivot_index};
-		comparison_indeces = temp;
+		comp_index_1 = n;
+		comp_index_2 = pivot_index;
 		if(array[n] > pivot){
 			if(n == i) { i++; }
 			else if (n == j) { j--; }
@@ -74,19 +84,81 @@ public class ComparisonQuicksorter implements Sorter{
 		return compare_i_or_j('j');
 	}
 	
-	private Step swap(){
+	private Step swap_step(){
 		if(i <= j){
-			
+			swap_index_1 = i;
+			swap_index_2 = j;
+			swap(i,j);
+			i++; j--;
+			check_step();
+			return Step.SWAP;
 		}
-		return Step.SWAP;
+		check_step();
+		return step();
+	}
+	
+	private void check_step(){
+		if(i > j)
+			current_step = QSStep.RECURSE;
+		else
+			current_step = QSStep.COMP_I;
+		
 	}
 	
 	private Step recurse(){
-		return Step.DONE;
+		if(lo < j && i < hi){
+			fork_quicksorter = new ComparisonQuicksorter(array, lo, j);
+			this.lo = i;
+			this.j = hi;
+			this.pivot = array[i + (j - i) / 2];
+			this.pivot_index = i + (j - i) / 2;
+			current_step = QSStep.FORK;
+		}else if(lo < j){
+			
+			this.hi = j;
+			this.pivot = array[lo + (j - lo) / 2];
+			this.pivot_index = array[lo + (j - lo) / 2];
+			this.i = lo;
+			current_step = QSStep.COMP_I;
+			
+			
+		}else if(i < hi){
+			this.lo = i;
+			this.j = hi;
+			this.pivot = array[i + (j - i) / 2];
+			this.pivot_index = i + (j - i) / 2;
+			current_step = QSStep.COMP_I;
+		}else{
+			sorted = true;
+			fork_quicksorter = null;
+			current_step = QSStep.SORTED;
+		}
+		return step();
 	}
 	
 	private Step fork(){
-		return Step.DONE;
+		Step s = fork_quicksorter.step();
+		if (s == Step.DONE){
+			current_step = QSStep.COMP_I;
+			return step();
+		}else if(s == Step.COMPARISON){
+			int[] c = fork_quicksorter.comparison_indeces();
+			comp_index_1 = c[0];
+			comp_index_2 = c[1];
+		}else{
+			int[] sw = fork_quicksorter.swap_indeces();
+			swap_index_1 = sw[0];
+			swap_index_2 = sw[1];
+		}
+		return s;
+	}
+	
+	private void swap(int i, int j){
+		if(i >= 0 && j >= 0 && i < array.length && j < array.length){
+			int temp = array[i];
+			array[i] = array[j];
+			array[j] = temp;
+		}
 	}
 
 }

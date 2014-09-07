@@ -66,7 +66,7 @@ public class Quicksorter implements Sorter{
 					i++;
 					j--;
 					
-					if(i > j) 
+					if(i > j) 	
 						recurse = true;
 					return Step.SWAP;
 				}
